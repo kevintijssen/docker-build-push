@@ -1,0 +1,9 @@
+name: Build and push Docker images
+description: Build and push Docker images with Buildx
+author: Kevin Tijssen (TNO)
+
+runs:
+  using: "composite"
+  steps:
+    - run: $GITHUB_ACTION_PATH/script.sh
+      shell: bash
