@@ -32,7 +32,7 @@ runs:
       shell: bash
       run: |
 
-        cat .docker/config.json
+        ls -la
         echo "${{inputs.command}},${{inputs.name}}"
 
         case ${{ inputs.command }} in
