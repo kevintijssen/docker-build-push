@@ -40,7 +40,7 @@ runs:
           for tag in $(echo ${{ inputs.tags }} | sed 's/,/ /g'); do
 
             # Generate complete dockerTag
-            if [[ -z ${{ inputs.registry }} ]]; then
+            if [ -z ${{ inputs.registry }} ]; then
               dockerTag="${{ inputs.name }}:${tag}"
             else
               dockerTag="${{ inputs.registry }}/${{ inputs.name }}:${tag}"
@@ -55,7 +55,7 @@ runs:
           for tag in $(echo ${{ inputs.tags }} | sed 's/,/ /g'); do
 
             # Generate complete dockerTag
-            if [[ -z ${{ inputs.registry }} ]]; then
+            if [ -z ${{ inputs.registry }} ]; then
               dockerTag="${{ inputs.name }}:${tag}"
             else
               dockerTag="${{ inputs.registry }}/${{ inputs.name }}:${tag}"
@@ -67,6 +67,7 @@ runs:
         }
 
         if [[ ${{ inputs.command }} == "build" ]]; then
+          echo "Start Build Process"
           build
           exit 0
         elif [[ ${{ inputs.command }} == "push" ]]; then
