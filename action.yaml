@@ -25,8 +25,12 @@ runs:
     - name: Docker Build / Push / Build & Push
       shell: bash
       run: |
-        echo ${{ inputs.command }}
-        echo ${{ inputs.name }}
-        echo ${{ inputs.tags }}
-        echo ${{ inputs.dockerfile }}
+        
+        if [[ ${{inputs.command}} != @(build|push|buildAndPush) ]]; then
+          echo "error: unknown variable '${{ inputs.command }}' for 'command'. Allowed variables are 'build, push, buildAndPush'"
+        fi
+        echo "The docker command is ${{ inputs.command }}"
+        echo "The container name will be ${{ inputs.name }}"
+        echo "The following tags will be used ${{ inputs.tags }}"
+        echo "The path to the dockerfile is ${{ inputs.dockerfile }}"
         env
