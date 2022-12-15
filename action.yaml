@@ -30,6 +30,9 @@ runs:
     - name: Docker Build / Push / Build & Push
       shell: bash
       run: |
+
+        echo "${{inputs.command}},${{inputs.name}}"
+
         case ${{ inputs.command }} in
             (build|push|buildAndPush) ;;
             (*) echo "ERROR: invalid variable '${{ inputs.command }}' for 'command'. Allowed variables are 'build, push, buildAndPush'";
