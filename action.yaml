@@ -8,8 +8,9 @@ inputs:
     required: true
     default: 'build'
   name:
-    description: 'Image Name, required'
-    required: true
+    description: 'Image Name'
+    required: false
+    default: '$GITHUB_WORKFLOW'
   tags:
     description: 'Image tag, default $GITHUB_SHA'
     required: false
@@ -18,6 +19,10 @@ inputs:
     description: 'Name of the Dockerfile (Default is $GITHUB_WORKSPACE/Dockerfile)'
     required: false
     default: '$GITHUB_WORKSPACE/Dockerfile'
+  registry:
+    description: 'The name of the registry server'
+    required: false
+    default: ''
 
 runs:
   using: "composite"
@@ -25,22 +30,50 @@ runs:
     - name: Docker Build / Push / Build & Push
       shell: bash
       run: |
-        
-        echo "Checking command"
-        if [[ ${{inputs.command}} != @(build|push|buildAndPush) ]]; then
-          echo "ERROR: invalid variable '${{ inputs.command }}' for 'command'. Allowed variables are 'build, push, buildAndPush'"
-          exit 1
-        fi
+        case ${{ inputs.command }} in
+            (build|push|buildAndPush) ;;
+            (*) echo "ERROR: invalid variable '${{ inputs.command }}' for 'command'. Allowed variables are 'build, push, buildAndPush'";
+            exit 1;;
+        esac
 
-        echo "Checking name"
-        if [[ ! ${{inputs.name}} ]]; then
-          echo "ERROR: Missing input for 'name'."
-        elif ! [[ ${{inputs.name}} =~ [a-z0-9.-/] ]]; then
-          echo "ERROR: invalid name '${{inputs.name}}'. Allow characters are 'a-z0-9./-'"
+        function build() {
+          for tag in $(echo ${{ inputs.tags }} | sed 's/,/ /g'); do
+
+            # Generate complete dockerTag
+            if [[ -z ${{ inputs.registry }} ]]; then
+              dockerTag="${{ inputs.name }}:${tag}"
+            else
+              dockerTag="${{ inputs.registry }}/${{ inputs.name }}:${tag}"
+            fi
+
+            # Run Docker build
+            docker build -t $dockerTag $dockerfile
+          done
+        }
+
+        function push() {
+          for tag in $(echo ${{ inputs.tags }} | sed 's/,/ /g'); do
+
+            # Generate complete dockerTag
+            if [[ -z ${{ inputs.registry }} ]]; then
+              dockerTag="${{ inputs.name }}:${tag}"
+            else
+              dockerTag="${{ inputs.registry }}/${{ inputs.name }}:${tag}"
+            fi
+
+            # Run Docker push
+            docker push $dockerTag -q
+          done
+        }
+
+        if [[ ${{ inputs.command }} == "build" ]]; then
+          build
+          exit 0
+        elif [[ ${{ inputs.command }} == "push" ]]; then
+          push
+          exit 0
+        else
+          build
+          push
+          exit 0
         fi
-        
-        echo "The docker command is ${{ inputs.command }}"
-        echo "The container name will be ${{ inputs.name }}"
-        echo "The following tags will be used ${{ inputs.tags }}"
-        echo "The path to the dockerfile is ${{ inputs.dockerfile }}"
-        env
