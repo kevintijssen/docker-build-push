@@ -26,14 +26,19 @@ runs:
       shell: bash
       run: |
         
+        echo "Checking command"
         if [[ ${{inputs.command}} != @(build|push|buildAndPush) ]]; then
           echo "ERROR: invalid variable '${{ inputs.command }}' for 'command'. Allowed variables are 'build, push, buildAndPush'"
           exit 1
-        elif [[ ! ${{inputs.name}} ]]; then
+        fi
+
+        echo "Checking name"
+        if [[ ! ${{inputs.name}} ]]; then
           echo "ERROR: Missing input for 'name'."
-        elif ! [[ ${{inputs.name}} =~ [a-z0-9.-/]]]; then
+        elif ! [[ ${{inputs.name}} =~ [a-z0-9.-/] ]]; then
           echo "ERROR: invalid name '${{inputs.name}}'. Allow characters are 'a-z0-9./-'"
         fi
+        
         echo "The docker command is ${{ inputs.command }}"
         echo "The container name will be ${{ inputs.name }}"
         echo "The following tags will be used ${{ inputs.tags }}"
