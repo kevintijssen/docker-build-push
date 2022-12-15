@@ -4,20 +4,20 @@ author: Kevin Tijssen (TNO)
 
 inputs:
   command: 
-    description: "What do you want to do? (build/push/buildAndPush)"
+    description: 'What do you want to do? (build/push/buildAndPush)'
     required: true
-    default: build
+    default: 'build'
   name:
-    description: "Image Name, required"
+    description: 'Image Name, required'
     required: true
   tags:
-    description: "Image tag, default $GITHUB_SHA"
+    description: 'Image tag, default $GITHUB_SHA'
     required: false
-    default: "${GITHUB_SHA}"
+    default: '${GITHUB_SHA}'
   dockerfile:
-    description: Name of the Dockerfile (Default is '$GITHUB_WORKSPACE/Dockerfile')
+    description: 'Name of the Dockerfile (Default is ${GITHUB_WORKSPACE}/Dockerfile)'
     required: false
-    default: "${GITHUB_WORKSPACE}/Dockerfile"
+    default: '${GITHUB_WORKSPACE}/Dockerfile'
 
 runs:
   using: "composite"
@@ -26,4 +26,7 @@ runs:
       shell: bash
       run: |
         echo ${{ inputs.command }}
+        echo ${{ inputs.name }}
+        echo ${{ inputs.tags }}
+        echo ${{ inputs.dockerfile }}
         env
