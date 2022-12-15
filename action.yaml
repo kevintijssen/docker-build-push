@@ -46,8 +46,10 @@ runs:
               dockerTag="${{ inputs.registry }}/${{ inputs.name }}:${tag}"
             fi
 
+            echo $dockerTag
+
             # Run Docker build
-            docker build -t $dockerTag $dockerfile
+            docker build -t $dockerTag ${{ inputs.dockerfile }}
           done
         }
 
@@ -67,7 +69,6 @@ runs:
         }
 
         if [[ ${{ inputs.command }} == "build" ]]; then
-          echo "Start Build Process"
           build
           exit 0
         elif [[ ${{ inputs.command }} == "push" ]]; then
