@@ -64,7 +64,7 @@ runs:
             fi
 
             # Run Docker push
-            docker push $dockerTag -q
+            docker push $dockerTag
           done
         }
 
