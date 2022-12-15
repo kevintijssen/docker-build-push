@@ -6,23 +6,23 @@ inputs:
   command: 
     description: 'What do you want to do? (build/push/buildAndPush)'
     required: true
-    default: 'build'
+    #default: 'build'
   name:
     description: 'Image Name'
     required: false
-    default: '$GITHUB_WORKFLOW'
+    #default: '$GITHUB_WORKFLOW'
   tags:
     description: 'Image tag, default $GITHUB_SHA'
     required: false
-    default: '$GITHUB_SHA'
+    #default: '$GITHUB_SHA'
   dockerfile:
     description: 'Name of the Dockerfile (Default is $GITHUB_WORKSPACE/.'
     required: false
-    default: '$GITHUB_WORKSPACE/.'
+    #default: '$GITHUB_WORKSPACE/.'
   registry:
     description: 'The name of the registry server'
     required: false
-    default: ''
+    #default: ''
 
 runs:
   using: "composite"
