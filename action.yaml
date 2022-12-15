@@ -32,7 +32,7 @@ runs:
       shell: bash
       run: |
 
-        ls -la
+        ls -la ~
         echo "${{inputs.command}},${{inputs.name}}"
 
         case ${{ inputs.command }} in
