@@ -6,17 +6,17 @@ inputs:
   command: 
     description: "What do you want to do? (build/push/buildAndPush)"
     required: true
-    default: build
   name:
     description: "Image Name, required"
     required: true
   tags:
     description: "Image tag, default $GITHUB_SHA"
     required: false
-    default: $GITHUB_SHA
+    default: "${GITHUB_SHA}"
   dockerfile:
-    description: Name of the Dockerfile (Default is 'PATH/Dockerfile')
+    description: Name of the Dockerfile (Default is '$GITHUB_WORKSPACE/Dockerfile')
     required: false
+    default: "${GITHUB_WORKSPACE}/Dockerfile"
 
 runs:
   using: "composite"
@@ -24,4 +24,5 @@ runs:
     - name: Docker Build / Push / Build & Push
       shell: bash
       run: |
+        echo ${{ inputs.command }}
         env
