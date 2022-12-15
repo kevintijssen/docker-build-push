@@ -6,6 +6,7 @@ inputs:
   command: 
     description: "What do you want to do? (build/push/buildAndPush)"
     required: true
+    default: build
   name:
     description: "Image Name, required"
     required: true
